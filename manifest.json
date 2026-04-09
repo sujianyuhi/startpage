@@ -1,0 +1,43 @@
+{
+  "name": "青柠起始页",
+  "short_name": "青柠起始页",
+  "description": "极致简洁、高效无感的浏览器起始页",
+  "version": "1.0.0",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#42b883",
+  "orientation": "any",
+  "scope": "/",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect fill='%2342b883' width='192' height='192' rx='24'/%3E%3Ctext x='96' y='120' font-size='100' text-anchor='middle' fill='white' font-family='Arial'%3E青%3C/text%3E%3C/svg%3E",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect fill='%2342b883' width='512' height='512' rx='48'/%3E%3Ctext x='256' y='340' font-size='280' text-anchor='middle' fill='white' font-family='Arial'%3E青%3C/text%3E%3C/svg%3E",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "utilities"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "打开设置",
+      "short_name": "设置",
+      "description": "快速打开设置面板",
+      "url": "/?action=settings"
+    },
+    {
+      "name": "添加快捷方式",
+      "short_name": "添加",
+      "description": "添加新的网站快捷方式",
+      "url": "/?action=add-shortcut"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+/**
+ * 时锦起始页 - 主样式入口文件
+ * 按顺序导入所有样式模块
+ */
+
+/* 1. 变量定义 */
+@import url('variables.css');
+
+/* 2. 基础重置 */
+@import url('base.css');
+
+/* 3. 布局样式 */
+@import url('layout.css');
+
+/* 4. 组件样式 */
+@import url('components/wallpaper.css');
+@import url('components/time.css');
+@import url('components/search.css');
+@import url('components/shortcuts.css');
+@import url('components/weather.css');
+@import url('components/todo.css');
+@import url('components/settings.css');
+@import url('components/context-menu.css');
+@import url('components/modal.css');
+@import url('components/toast.css');
+@import url('components/about.css');

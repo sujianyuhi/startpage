@@ -1,0 +1,109 @@
+/**
+ * 时锦起始页 - 时间日期组件样式
+ */
+
+/* 时间模块 */
+.time-module {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+.time-display {
+    font-size: clamp(3.5rem, 10vw, 6rem);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--text-primary);
+    line-height: 1.2;
+    user-select: none;
+    transition: all 0.3s var(--ease-out);
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.time-display:hover {
+    transform: scale(1.02);
+    text-shadow: 0 4px 20px rgba(66, 184, 131, 0.3);
+}
+
+.time-display .colon {
+    display: inline-block;
+    margin: 0 0.08em;
+    animation: colonPulse 2s ease-in-out infinite;
+}
+
+.time-display .time-unit {
+    display: inline-block;
+    transition: all 0.3s var(--ease-out);
+}
+
+.date-display {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-top: var(--spacing-xs);
+    letter-spacing: 0.1em;
+    user-select: none;
+    transition: all 0.3s var(--ease-out);
+}
+
+.greeting-display {
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border-radius: var(--border-radius);
+    user-select: none;
+    animation: greetingFadeIn 0.8s var(--ease-out);
+    position: relative;
+}
+
+.greeting-display::before,
+.greeting-display::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 30px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+    transform: translateY(-50%);
+}
+
+.greeting-display::before {
+    right: 100%;
+    margin-right: var(--spacing-sm);
+}
+
+.greeting-display::after {
+    left: 100%;
+    margin-left: var(--spacing-sm);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .time-display {
+        letter-spacing: 0.02em;
+    }
+
+    .greeting-display::before,
+    .greeting-display::after {
+        width: 20px;
+    }
+
+    .greeting-display {
+        letter-spacing: 0.05em;
+    }
+}
+
+@media (max-width: 480px) {
+    .time-display {
+        font-size: clamp(2.5rem, 12vw, 4rem);
+    }
+
+    .greeting-display::before,
+    .greeting-display::after {
+        display: none;
+    }
+}

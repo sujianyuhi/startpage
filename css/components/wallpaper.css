@@ -1,0 +1,33 @@
+/**
+ * 时锦起始页 - 壁纸背景组件样式
+ */
+
+/* 壁纸背景容器 */
+.wallpaper-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.wallpaper {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity var(--transition-slow) var(--ease-out);
+}
+
+.wallpaper-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--overlay-color, rgba(0, 0, 0, 0));
+    backdrop-filter: blur(var(--wallpaper-blur, 0px));
+    -webkit-backdrop-filter: blur(var(--wallpaper-blur, 0px));
+    transition: all var(--transition-normal) var(--ease-out);
+}

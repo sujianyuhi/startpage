@@ -1,0 +1,60 @@
+/**
+ * 时锦起始页 - 布局样式
+ * 包含主容器、沉浸模式、响应式布局等
+ */
+
+/* 主容器 */
+.main-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+    position: relative;
+}
+
+/* 沉浸模式 */
+.main-container.immersive .hide-in-immersive {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-20px);
+    transition: opacity var(--transition-normal) var(--ease-out), transform var(--transition-normal) var(--ease-out);
+}
+
+/* ==================== 响应式布局 ==================== */
+@media (max-width: 768px) {
+    :root {
+        --search-width: 100%;
+        --search-height: 50px;
+    }
+
+    .main-container {
+        padding: var(--spacing-md);
+    }
+
+    .time-display {
+        font-size: 2.5rem;
+    }
+
+    .shortcuts-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--spacing-sm);
+    }
+
+    .shortcut-item {
+        padding: var(--spacing-sm);
+    }
+
+    .shortcut-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1199px) {
+    .shortcuts-grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}

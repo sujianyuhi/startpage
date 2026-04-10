@@ -1,0 +1,28 @@
+/**
+ * 时锦起始页 - 提示消息组件样式
+ */
+
+/* 提示消息 */
+.toast {
+    position: fixed;
+    bottom: var(--spacing-xl);
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 4px 16px var(--shadow-color);
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    opacity: 0;
+    transition: all var(--transition-normal) var(--ease-out);
+    z-index: 500;
+}
+
+.toast.active {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}

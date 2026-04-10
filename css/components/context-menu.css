@@ -1,0 +1,55 @@
+/**
+ * 时锦起始页 - 右键菜单组件样式
+ */
+
+/* 右键菜单 */
+.context-menu {
+    position: fixed;
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--card-radius);
+    padding: var(--spacing-sm);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px var(--shadow-color);
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.95);
+    transition: all var(--transition-fast) var(--ease-out);
+    z-index: 300;
+    min-width: 180px;
+}
+
+.context-menu.active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+.context-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--spacing-sm);
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    transition: all var(--transition-fast) var(--ease-out);
+}
+
+.context-item:hover {
+    background: var(--bg-secondary);
+}
+
+.context-item svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--text-secondary);
+}
+
+.context-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: var(--spacing-sm) 0;
+}

@@ -9,23 +9,23 @@
     max-width: var(--search-width);
     position: relative;
     transition: all var(--transition-normal) var(--ease-out);
+    z-index: 10;
 }
 
 .search-box {
     display: flex;
     align-items: center;
     height: var(--search-height);
-    background: var(--glass-bg);
-    border: 1.5px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.5);
     border-radius: var(--border-radius);
     padding: 0 var(--spacing-md) 0 var(--spacing-xl);
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    box-shadow: 
-        0 4px 24px var(--shadow-color),
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.08),
         0 1px 3px rgba(0, 0, 0, 0.04),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.02);
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
     transition: all var(--transition-fast) var(--ease-spring);
     position: relative;
     overflow: hidden;
@@ -45,12 +45,10 @@
 }
 
 .search-box:hover {
-    border-color: var(--border-color-strong);
-    box-shadow: 
-        0 8px 32px var(--shadow-color-medium),
-        0 2px 8px rgba(0, 0, 0, 0.06),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.02);
+    border-color: rgba(255, 255, 255, 0.7);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
     transform: translateY(-3px);
 }
 
@@ -60,12 +58,10 @@
 
 .search-box:focus-within {
     border-color: var(--primary-color);
-    box-shadow: 
-        0 12px 40px var(--shadow-color-strong),
-        0 4px 12px rgba(124, 58, 237, 0.15),
+    box-shadow:
+        0 12px 40px rgba(0, 0, 0, 0.15),
         0 0 0 4px var(--primary-light),
-        inset 0 1px 0 rgba(255, 255, 255, 0.25),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.02);
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
     transform: translateY(-3px);
 }
 
@@ -225,21 +221,21 @@
     position: absolute;
     top: calc(100% + var(--spacing-sm));
     left: 0;
-    background: var(--glass-bg);
-    border: 1.5px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.6);
     border-radius: var(--card-radius);
     padding: var(--spacing-sm);
     min-width: 200px;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 
-        0 16px 48px var(--shadow-color-strong),
-        0 0 0 1px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
     opacity: 0;
     visibility: hidden;
     transform: translateY(-12px) scale(0.98);
     transition: all var(--transition-fast) var(--ease-spring);
-    z-index: 100;
+    z-index: 1000;
     overflow: hidden;
 }
 
@@ -316,15 +312,15 @@
     top: calc(100% + var(--spacing-sm));
     left: 0;
     right: 0;
-    background: var(--glass-bg);
-    border: 1.5px solid var(--border-color);
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.6);
     border-radius: var(--card-radius);
     padding: var(--spacing-xs) 0;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow: 
-        0 16px 48px var(--shadow-color-strong),
-        0 0 0 1px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
     opacity: 0;
     visibility: hidden;
     transform: translateY(-12px) scale(0.98);

@@ -1,6 +1,7 @@
 /**
  * 时锦起始页 - 布局样式
  * 包含主容器、沉浸模式、响应式布局等
+ * 优化版本：增强视觉层次和空间感 v2.0
  */
 
 /* 主容器 */
@@ -10,46 +11,97 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-xl);
+    padding: var(--spacing-3xl) var(--spacing-xl);
     position: relative;
+    gap: var(--spacing-2xl);
 }
 
-/* 沉浸模式 */
+/* 沉浸模式 - 增强过渡效果 */
 .main-container.immersive .hide-in-immersive {
     opacity: 0;
     pointer-events: none;
-    transform: translateY(-20px);
-    transition: opacity var(--transition-normal) var(--ease-out), transform var(--transition-normal) var(--ease-out);
+    transform: translateY(-24px) scale(0.97);
+    filter: blur(6px);
+    transition: 
+        opacity var(--transition-slower) var(--ease-out),
+        transform var(--transition-slower) var(--ease-out),
+        filter var(--transition-slower) var(--ease-out);
+}
+
+/* 模块进入动画 */
+.time-module {
+    animation: fadeIn 0.8s var(--ease-out) forwards;
+}
+
+.search-container {
+    animation: fadeIn 0.8s var(--ease-out) 0.12s forwards;
+    opacity: 0;
+}
+
+.shortcuts-container {
+    animation: fadeIn 0.8s var(--ease-out) 0.24s forwards;
+    opacity: 0;
+}
+
+.weather-module {
+    animation: slideInDown 0.6s var(--ease-out) 0.36s forwards;
+    opacity: 0;
+}
+
+.todo-module {
+    animation: slideInUp 0.6s var(--ease-out) 0.48s forwards;
+    opacity: 0;
+}
+
+.settings-trigger {
+    animation: scaleIn 0.6s var(--ease-out) 0.6s forwards;
+    opacity: 0;
 }
 
 /* ==================== 响应式布局 ==================== */
 @media (max-width: 768px) {
     :root {
         --search-width: 100%;
-        --search-height: 50px;
+        --search-height: 56px;
     }
 
     .main-container {
-        padding: var(--spacing-md);
+        padding: var(--spacing-xl) var(--spacing-lg);
+        gap: var(--spacing-xl);
     }
 
     .time-display {
-        font-size: 2.5rem;
+        font-size: clamp(2.5rem, 12vw, 4rem);
     }
 
     .shortcuts-grid {
         grid-template-columns: repeat(4, 1fr);
-        gap: var(--spacing-sm);
+        gap: var(--spacing-md);
     }
 
     .shortcut-item {
-        padding: var(--spacing-sm);
+        padding: var(--spacing-md) var(--spacing-sm);
     }
 
     .shortcut-icon {
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
+        width: 48px;
+        height: 48px;
+        font-size: 1.125rem;
+    }
+
+    .weather-module {
+        top: var(--spacing-md);
+        right: var(--spacing-md);
+    }
+
+    .todo-module {
+        bottom: var(--spacing-lg);
+        right: var(--spacing-lg);
+    }
+
+    .settings-trigger {
+        bottom: var(--spacing-lg);
+        left: var(--spacing-lg);
     }
 }
 
@@ -57,4 +109,70 @@
     .shortcuts-grid {
         grid-template-columns: repeat(6, 1fr);
     }
+}
+
+@media (min-width: 1200px) {
+    .shortcuts-grid {
+        grid-template-columns: repeat(8, 1fr);
+    }
+}
+
+/* ==================== 高分辨率屏幕优化 ==================== */
+@media (min-width: 1920px) {
+    :root {
+        --search-width: 800px;
+        --search-height: 64px;
+    }
+
+    .time-display {
+        font-size: clamp(4rem, 8vw, 7rem);
+    }
+
+    .shortcuts-grid {
+        grid-template-columns: repeat(10, 1fr);
+        max-width: 1200px;
+    }
+}
+
+/* ==================== 暗色壁纸适配 ==================== */
+.wallpaper-dark .time-display,
+.wallpaper-dark .date-display {
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+}
+
+.wallpaper-dark .greeting-display {
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* ==================== 搜索框顶部位置 - 紧凑布局 ==================== */
+.main-container.search-position-top .time-module {
+    margin-bottom: var(--spacing-sm);
+}
+
+.main-container.search-position-top .time-display {
+    font-size: clamp(2.5rem, 8vw, 5rem);
+}
+
+.main-container.search-position-top .greeting-display {
+    margin-top: var(--spacing-sm);
+    font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+}
+
+.main-container.search-position-top .greeting-display::before,
+.main-container.search-position-top .greeting-display::after {
+    width: 24px;
+}
+
+.main-container.search-position-top .date-display {
+    margin-top: var(--spacing-xs);
+    font-size: 1rem;
+}
+
+.main-container.search-position-top .shortcuts-grid {
+    gap: var(--spacing-md);
+    padding: var(--spacing-xs);
+}
+
+.main-container.search-position-top .shortcut-item {
+    padding: var(--spacing-md) var(--spacing-xs);
 }

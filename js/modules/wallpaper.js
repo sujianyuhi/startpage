@@ -53,6 +53,10 @@ export async function updateWallpaper() {
         let url = '';
         
         switch (source) {
+            case 'gradient':
+                wallpaperEl.style.display = 'none';
+                document.body.style.background = state.settings.backgroundGradient || 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)';
+                return;
             case 'bing':
                 url = await getBingWallpaper();
                 break;

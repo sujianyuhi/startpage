@@ -75,13 +75,17 @@ function loadData() {
 function initSearchPosition() {
     const container = document.getElementById('mainContainer');
     if (!container) return;
-    
+
     if (state.settings.searchPosition === 'top') {
         container.style.justifyContent = 'flex-start';
-        container.style.paddingTop = '15vh';
+        container.style.paddingTop = '8vh';
+        container.style.gap = 'var(--spacing-lg)';
+        container.classList.add('search-position-top');
     } else {
         container.style.justifyContent = 'center';
         container.style.paddingTop = '';
+        container.style.gap = '';
+        container.classList.remove('search-position-top');
     }
 }
 

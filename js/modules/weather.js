@@ -6,13 +6,39 @@
 import { state, CONFIG } from '../config.js';
 import { $, showToast } from '../utils/dom.js';
 
-// ==================== 高德地图 API 配置 ====================
-// 请在高德开放平台申请 Key: https://lbs.amap.com/
-const AMAP_KEY = 'e2432a4b3e865870924d9a2bc14e6ba5'; // 替换为您的高德 Key
+const AMAP_KEY = 'e2432a4b3e865870924d9a2bc14e6ba5';
 
-/**
- * 初始化天气模块
- */
+const WEATHER_CLASS_MAP = {
+    '晴': 'weather-sunny',
+    '多云': 'weather-cloudy',
+    '阴': 'weather-overcast',
+    '小雨': 'weather-rainy',
+    '中雨': 'weather-rainy',
+    '大雨': 'weather-rainy',
+    '暴雨': 'weather-rainy',
+    '阵雨': 'weather-rainy',
+    '雷阵雨': 'weather-rainy',
+    '雨夹雪': 'weather-snowy',
+    '小雪': 'weather-snowy',
+    '中雪': 'weather-snowy',
+    '大雪': 'weather-snowy',
+    '暴雪': 'weather-snowy',
+    '雾': 'weather-overcast',
+    '霾': 'weather-overcast',
+    '浮尘': 'weather-overcast',
+    '扬沙': 'weather-overcast',
+    '沙尘暴': 'weather-overcast'
+};
+
+function setWeatherClass(condition) {
+    const module = document.getElementById('weatherModule');
+    if (!module) return;
+    const weatherClasses = ['weather-sunny', 'weather-cloudy', 'weather-overcast', 'weather-rainy', 'weather-snowy'];
+    weatherClasses.forEach(cls => module.classList.remove(cls));
+    const targetClass = WEATHER_CLASS_MAP[condition] || 'weather-sunny';
+    module.classList.add(targetClass);
+}
+
 export async function init() {
     if (!state.settings.showWeather) {
         const weatherModule = document.getElementById('weatherModule');
@@ -22,16 +48,13 @@ export async function init() {
         return;
     }
     
-    // 检查是否配置了高德 Key
     if (AMAP_KEY === 'YOUR_AMAP_KEY_HERE') {
         console.warn('请配置高德地图 API Key');
-        // 使用备用方案
         await updateWeatherFallback();
     } else {
         await updateWeather();
     }
     
-    // 每30分钟更新一次
     setInterval(() => {
         if (AMAP_KEY !== 'YOUR_AMAP_KEY_HERE') {
             updateWeather();
@@ -41,12 +64,8 @@ export async function init() {
     }, 30 * 60 * 1000);
 }
 
-/**
- * 使用高德 API 更新天气信息
- */
 async function updateWeather() {
     try {
-        // 1. 使用高德 IP 定位获取城市信息
         const locationRes = await fetch(`https://restapi.amap.com/v3/ip?key=${AMAP_KEY}`);
         const locationData = await locationRes.json();
         
@@ -57,7 +76,6 @@ async function updateWeather() {
         const adcode = locationData.adcode;
         const city = locationData.city || '本地';
         
-        // 2. 使用高德天气 API 获取天气
         const weatherRes = await fetch(`https://restapi.amap.com/v3/weather/weatherInfo?key=${AMAP_KEY}&city=${adcode}&extensions=base`);
         const weatherData = await weatherRes.json();
         
@@ -69,44 +87,38 @@ async function updateWeather() {
             const windDirection = live.winddirection;
             const windPower = live.windpower;
             
-            // 更新主信息
+            setWeatherClass(weather);
+            
             const weatherTemp = document.getElementById('weatherTemp');
             const weatherDesc = document.getElementById('weatherDesc');
             const weatherCity = document.getElementById('weatherCity');
             const weatherIcon = document.getElementById('weatherIcon');
             
-            if (weatherTemp) weatherTemp.textContent = `${temp}°C`;
+            if (weatherTemp) weatherTemp.textContent = `${temp}°`;
             if (weatherDesc) weatherDesc.textContent = weather;
             if (weatherCity) weatherCity.textContent = city.replace('市', '');
             if (weatherIcon) weatherIcon.innerHTML = getWeatherIcon(weather);
             
-            // 更新详细信息
             const weatherHumidity = document.getElementById('weatherHumidity');
             const weatherWind = document.getElementById('weatherWind');
             
             if (weatherHumidity) weatherHumidity.textContent = `${humidity}%`;
-            if (weatherWind) weatherWind.textContent = `${windDirection} ${windPower}`;
+            if (weatherWind) weatherWind.textContent = `${windDirection}${windPower}级`;
         } else {
             throw new Error('获取天气失败');
         }
     } catch (e) {
         console.warn('高德天气 API 错误:', e);
-        // 出错时切换到备用方案
         await updateWeatherFallback();
     }
 }
 
-/**
- * 备用天气方案（使用 Open-Meteo）
- */
 async function updateWeatherFallback() {
     try {
-        // 使用IP定位获取城市
         const locationRes = await fetch('https://ipapi.co/json/');
         const locationData = await locationRes.json();
         const city = locationData.city || '北京';
         
-        // 使用Open-Meteo免费天气API
         const lat = locationData.latitude || 39.9042;
         const lon = locationData.longitude || 116.4074;
         
@@ -118,18 +130,18 @@ async function updateWeatherFallback() {
             const weatherCode = weatherData.current_weather.weathercode;
             const condition = getWeatherCondition(weatherCode);
             
-            // 更新主信息
+            setWeatherClass(condition);
+            
             const weatherTemp = document.getElementById('weatherTemp');
             const weatherDesc = document.getElementById('weatherDesc');
             const weatherCity = document.getElementById('weatherCity');
             const weatherIcon = document.getElementById('weatherIcon');
             
-            if (weatherTemp) weatherTemp.textContent = `${temp}°C`;
+            if (weatherTemp) weatherTemp.textContent = `${temp}°`;
             if (weatherDesc) weatherDesc.textContent = condition;
             if (weatherCity) weatherCity.textContent = city;
             if (weatherIcon) weatherIcon.innerHTML = CONFIG.weatherIcons[condition] || CONFIG.weatherIcons['晴'];
             
-            // 备用方案没有详细数据，隐藏详情区域
             const weatherDetails = document.getElementById('weatherDetails');
             if (weatherDetails) {
                 weatherDetails.style.display = 'none';
@@ -144,13 +156,7 @@ async function updateWeatherFallback() {
     }
 }
 
-/**
- * 根据天气描述获取对应图标
- * @param {string} weather - 天气描述
- * @returns {string} SVG 图标
- */
 function getWeatherIcon(weather) {
-    // 高德天气常见类型映射
     const weatherMap = {
         '晴': '晴',
         '多云': '多云',
@@ -177,13 +183,7 @@ function getWeatherIcon(weather) {
     return CONFIG.weatherIcons[condition] || CONFIG.weatherIcons['晴'];
 }
 
-/**
- * 根据天气代码获取天气状况（备用方案使用）
- * @param {number} code - WMO 天气代码
- * @returns {string} 天气状况描述
- */
 function getWeatherCondition(code) {
-    // WMO Weather interpretation codes
     if (code === 0) return '晴';
     if (code >= 1 && code <= 3) return '多云';
     if (code >= 45 && code <= 48) return '阴';
@@ -195,10 +195,6 @@ function getWeatherCondition(code) {
     return '晴';
 }
 
-/**
- * 切换天气显示
- * @param {boolean} show - 是否显示
- */
 export function toggleWeather(show) {
     const weatherModule = document.getElementById('weatherModule');
     if (weatherModule) {

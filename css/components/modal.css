@@ -1,5 +1,6 @@
 /**
  * 时锦起始页 - 弹窗组件样式
+ * 优化版本：现代卡片设计和流畅动画
  */
 
 /* 弹窗遮罩层 */
@@ -9,7 +10,9 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -17,6 +20,7 @@
     visibility: hidden;
     transition: all var(--transition-normal) var(--ease-out);
     z-index: 400;
+    padding: var(--spacing-lg);
 }
 
 .modal-overlay.active {
@@ -26,30 +30,46 @@
 
 .modal {
     background: var(--bg-primary);
-    border-radius: var(--card-radius);
+    border-radius: var(--border-radius);
     padding: var(--spacing-xl);
-    max-width: 400px;
-    width: 90%;
-    box-shadow: 0 16px 48px var(--shadow-color);
-    transform: scale(0.95);
-    transition: transform var(--transition-normal) var(--ease-out);
+    max-width: 440px;
+    width: 100%;
+    box-shadow: 
+        0 24px 80px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    transform: scale(0.92) translateY(20px);
+    transition: all var(--transition-slow) var(--ease-spring);
+    position: relative;
+    overflow: hidden;
 }
 
 .modal-overlay.active .modal {
-    transform: scale(1);
+    transform: scale(1) translateY(0);
+}
+
+.modal::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--primary-gradient);
 }
 
 .modal-title {
-    font-size: 1.125rem;
-    font-weight: 600;
+    font-size: 1.25rem;
+    font-weight: 700;
     color: var(--text-primary);
     margin-bottom: var(--spacing-md);
+    letter-spacing: -0.01em;
 }
 
 .modal-text {
-    font-size: 0.875rem;
+    font-size: 0.9375rem;
     color: var(--text-secondary);
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-xl);
+    line-height: 1.6;
 }
 
 .modal-btns {
@@ -60,13 +80,13 @@
 
 /* 快捷方式弹窗 */
 .shortcut-modal .modal {
-    max-width: 360px;
+    max-width: 400px;
 }
 
 .shortcut-form {
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
+    gap: var(--spacing-lg);
 }
 
 .form-group {
@@ -76,23 +96,104 @@
 }
 
 .form-label {
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: 0.9375rem;
+    font-weight: 600;
     color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.form-label .required {
+    color: var(--error-color);
 }
 
 .form-input {
-    height: 40px;
+    height: 48px;
     padding: 0 var(--spacing-md);
-    border: 1px solid var(--border-color);
-    border-radius: var(--spacing-sm);
-    background: var(--bg-primary);
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    background: var(--bg-secondary);
     color: var(--text-primary);
-    font-size: 0.875rem;
+    font-size: 0.9375rem;
     outline: none;
-    transition: all var(--transition-fast) var(--ease-out);
+    transition: all var(--transition-fast) var(--ease-spring);
 }
 
 .form-input:focus {
     border-color: var(--primary-color);
+    background: var(--bg-primary);
+    box-shadow: 0 0 0 4px var(--primary-light);
+}
+
+.form-input::placeholder {
+    color: var(--text-tertiary);
+}
+
+.form-input:invalid:not(:placeholder-shown) {
+    border-color: var(--error-color);
+}
+
+.form-hint {
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+    margin-top: var(--spacing-xs);
+}
+
+/* 确认弹窗特殊样式 */
+.confirm-modal .modal {
+    text-align: center;
+    max-width: 380px;
+}
+
+.confirm-modal .modal-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.confirm-modal .modal-title svg {
+    width: 28px;
+    height: 28px;
+    fill: var(--warning-color);
+}
+
+.confirm-modal .modal-btns {
+    justify-content: center;
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .modal-overlay {
+        padding: var(--spacing-md);
+        align-items: flex-end;
+    }
+
+    .modal {
+        padding: var(--spacing-lg);
+        border-radius: var(--card-radius);
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .modal-overlay.active .modal {
+        transform: scale(1) translateY(0);
+    }
+
+    .modal-title {
+        font-size: 1.125rem;
+    }
+
+    .modal-btns {
+        flex-direction: column-reverse;
+    }
+
+    .modal-btns .setting-btn {
+        width: 100%;
+    }
+
+    .shortcut-modal .modal {
+        max-width: 100%;
+    }
 }

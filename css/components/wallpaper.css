@@ -1,5 +1,6 @@
 /**
  * 时锦起始页 - 壁纸背景组件样式
+ * 优化版本：增强视觉效果和过渡动画
  */
 
 /* 壁纸背景容器 */
@@ -17,7 +18,19 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: opacity var(--transition-slow) var(--ease-out);
+    transition: 
+        opacity var(--transition-slow) var(--ease-out),
+        transform 10s ease-out;
+    animation: wallpaperZoom 20s ease-in-out infinite alternate;
+}
+
+@keyframes wallpaperZoom {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.05);
+    }
 }
 
 .wallpaper-overlay {
@@ -30,4 +43,169 @@
     backdrop-filter: blur(var(--wallpaper-blur, 0px));
     -webkit-backdrop-filter: blur(var(--wallpaper-blur, 0px));
     transition: all var(--transition-normal) var(--ease-out);
+}
+
+/* 壁纸切换动画 */
+.wallpaper-switching {
+    animation: wallpaperSwitch 0.8s var(--ease-out);
+}
+
+@keyframes wallpaperSwitch {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0;
+        transform: scale(1.02);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 纯色背景 */
+.wallpaper-solid {
+    background: var(--wallpaper-color, var(--bg-primary));
+    width: 100%;
+    height: 100%;
+    transition: background var(--transition-slow) var(--ease-out);
+}
+
+/* 渐变背景 */
+.wallpaper-gradient {
+    width: 100%;
+    height: 100%;
+    background: var(--wallpaper-gradient, linear-gradient(135deg, #667eea 0%, #764ba2 100%));
+    transition: background var(--transition-slow) var(--ease-out);
+}
+
+/* 壁纸加载状态 */
+.wallpaper-loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* 壁纸错误状态 */
+.wallpaper-error {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: var(--text-tertiary);
+}
+
+.wallpaper-error svg {
+    width: 48px;
+    height: 48px;
+    fill: var(--text-tertiary);
+    margin-bottom: var(--spacing-sm);
+    opacity: 0.5;
+}
+
+/* 壁纸信息浮层 */
+.wallpaper-info {
+    position: absolute;
+    bottom: var(--spacing-lg);
+    right: var(--spacing-lg);
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: var(--glass-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all var(--transition-fast) var(--ease-out);
+    pointer-events: none;
+}
+
+.wallpaper-container:hover .wallpaper-info {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 暗色遮罩 */
+.wallpaper-dark-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.1) 50%,
+        rgba(0, 0, 0, 0.3) 100%
+    );
+    pointer-events: none;
+}
+
+/* 粒子效果容器 */
+.wallpaper-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.wallpaper-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: particleFloat 15s ease-in-out infinite;
+}
+
+@keyframes particleFloat {
+    0%, 100% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .wallpaper {
+        animation: wallpaperZoom 30s ease-in-out infinite alternate;
+    }
+
+    .wallpaper-info {
+        display: none;
+    }
+
+    .wallpaper-dark-overlay {
+        background: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0) 0%,
+            rgba(0, 0, 0, 0.2) 50%,
+            rgba(0, 0, 0, 0.4) 100%
+        );
+    }
 }

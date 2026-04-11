@@ -1,28 +1,219 @@
 /**
  * 时锦起始页 - 提示消息组件样式
+ * 优化版本：现代设计和流畅动画
  */
 
 /* 提示消息 */
 .toast {
     position: fixed;
-    bottom: var(--spacing-xl);
+    bottom: var(--spacing-2xl);
     left: 50%;
     transform: translateX(-50%) translateY(100px);
-    padding: var(--spacing-sm) var(--spacing-lg);
+    padding: var(--spacing-md) var(--spacing-xl);
     background: var(--glass-bg);
-    border: 1px solid var(--border-color);
-    border-radius: var(--card-radius);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 4px 16px var(--shadow-color);
-    font-size: 0.875rem;
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--border-radius);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 
+        0 16px 48px var(--shadow-color-strong),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    font-size: 0.9375rem;
     color: var(--text-primary);
+    font-weight: 500;
     opacity: 0;
-    transition: all var(--transition-normal) var(--ease-out);
+    transition: all var(--transition-normal) var(--ease-spring);
     z-index: 500;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    max-width: 90vw;
+    min-width: 200px;
+    justify-content: center;
 }
 
 .toast.active {
     opacity: 1;
     transform: translateX(-50%) translateY(0);
+}
+
+/* Toast 图标 */
+.toast-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.toast-icon.success {
+    fill: var(--success-color);
+}
+
+.toast-icon.error {
+    fill: var(--error-color);
+}
+
+.toast-icon.warning {
+    fill: var(--warning-color);
+}
+
+.toast-icon.info {
+    fill: var(--primary-color);
+}
+
+/* Toast 内容 */
+.toast-content {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+/* Toast 类型样式 */
+.toast.success {
+    border-color: rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.toast.error {
+    border-color: rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.toast.warning {
+    border-color: rgba(245, 158, 11, 0.3);
+    background: rgba(245, 158, 11, 0.1);
+}
+
+.toast.info {
+    border-color: rgba(99, 102, 241, 0.3);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+/* Toast 进度条 */
+.toast-progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 3px;
+    background: var(--primary-gradient);
+    border-radius: 0 0 0 var(--border-radius);
+    transition: width linear;
+}
+
+.toast.success .toast-progress {
+    background: var(--success-color);
+}
+
+.toast.error .toast-progress {
+    background: var(--error-color);
+}
+
+.toast.warning .toast-progress {
+    background: var(--warning-color);
+}
+
+/* Toast 关闭按钮 */
+.toast-close {
+    width: 20px;
+    height: 20px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: var(--spacing-sm);
+    opacity: 0.6;
+    transition: all var(--transition-fast) var(--ease-out);
+    border-radius: 4px;
+}
+
+.toast-close:hover {
+    opacity: 1;
+    background: var(--bg-secondary);
+}
+
+.toast-close svg {
+    width: 14px;
+    height: 14px;
+    fill: var(--text-secondary);
+}
+
+/* Toast 位置变体 */
+.toast.top {
+    bottom: auto;
+    top: var(--spacing-xl);
+    transform: translateX(-50%) translateY(-100px);
+}
+
+.toast.top.active {
+    transform: translateX(-50%) translateY(0);
+}
+
+.toast.top-left {
+    bottom: auto;
+    top: var(--spacing-xl);
+    left: var(--spacing-xl);
+    right: auto;
+    transform: translateY(-100px);
+}
+
+.toast.top-left.active {
+    transform: translateY(0);
+}
+
+.toast.top-right {
+    bottom: auto;
+    top: var(--spacing-xl);
+    left: auto;
+    right: var(--spacing-xl);
+    transform: translateY(-100px);
+}
+
+.toast.top-right.active {
+    transform: translateY(0);
+}
+
+.toast.bottom-left {
+    left: var(--spacing-xl);
+    right: auto;
+    transform: translateY(100px);
+}
+
+.toast.bottom-left.active {
+    transform: translateY(0);
+}
+
+.toast.bottom-right {
+    left: auto;
+    right: var(--spacing-xl);
+    transform: translateY(100px);
+}
+
+.toast.bottom-right.active {
+    transform: translateY(0);
+}
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .toast {
+        padding: var(--spacing-sm) var(--spacing-lg);
+        font-size: 0.875rem;
+        border-radius: var(--card-radius);
+        min-width: auto;
+        width: calc(100vw - var(--spacing-lg) * 2);
+        max-width: none;
+    }
+
+    .toast-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .toast.top-left,
+    .toast.top-right,
+    .toast.bottom-left,
+    .toast.bottom-right {
+        left: var(--spacing-md);
+        right: var(--spacing-md);
+    }
 }

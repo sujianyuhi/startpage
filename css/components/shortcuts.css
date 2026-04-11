@@ -1,19 +1,21 @@
 /**
  * 时锦起始页 - 快捷方式组件样式
+ * 优化版本：增强视觉吸引力和交互体验 v2.0
  */
 
 /* 快捷方式容器 */
 .shortcuts-container {
     width: 100%;
-    max-width: 900px;
+    max-width: 960px;
     transition: all var(--transition-normal) var(--ease-out);
 }
 
 .shortcuts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-    gap: var(--spacing-md);
+    grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+    gap: var(--spacing-lg);
     justify-items: center;
+    padding: var(--spacing-md);
 }
 
 /* 快捷方式项 */
@@ -21,74 +23,305 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-md);
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg) var(--spacing-sm);
     border-radius: var(--card-radius);
     cursor: pointer;
-    transition: all var(--transition-fast) var(--ease-out);
+    transition: all var(--transition-fast) var(--ease-spring);
     text-decoration: none;
     position: relative;
+    width: 100%;
+    max-width: 104px;
+}
+
+.shortcut-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--glass-bg);
+    border-radius: var(--card-radius);
+    opacity: 0;
+    transform: scale(0.92);
+    transition: all var(--transition-fast) var(--ease-out);
+    z-index: -1;
 }
 
 .shortcut-item:hover {
-    background: var(--glass-bg);
-    transform: translateY(-4px);
-    box-shadow: 0 8px 24px var(--shadow-color);
+    transform: translateY(-8px);
+}
+
+.shortcut-item:hover::before {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.shortcut-item:active {
+    transform: translateY(-2px) scale(0.98);
 }
 
 .shortcut-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: var(--card-radius);
+    width: 56px;
+    height: 56px;
+    border-radius: var(--border-radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.25rem;
-    font-weight: 600;
+    font-size: 1.5rem;
+    font-weight: 700;
     color: white;
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    background: var(--primary-gradient);
     overflow: hidden;
-    transition: all var(--transition-fast) var(--ease-out);
+    transition: all var(--transition-fast) var(--ease-spring);
+    box-shadow: 
+        0 6px 16px rgba(124, 58, 237, 0.35),
+        0 2px 4px rgba(0, 0, 0, 0.08);
+    position: relative;
+}
+
+.shortcut-icon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+    opacity: 0;
+    transition: opacity var(--transition-fast) var(--ease-out);
+}
+
+.shortcut-item:hover .shortcut-icon {
+    transform: scale(1.1) rotate(3deg);
+    box-shadow: 
+        0 12px 32px rgba(124, 58, 237, 0.45),
+        0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.shortcut-item:hover .shortcut-icon::before {
+    opacity: 1;
+}
+
+.shortcut-item:active .shortcut-icon {
+    transform: scale(1.03);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35);
 }
 
 .shortcut-icon img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform var(--transition-fast) var(--ease-out);
 }
 
-.shortcut-item:hover .shortcut-icon {
-    transform: scale(1.05);
+.shortcut-item:hover .shortcut-icon img {
+    transform: scale(1.1);
 }
 
 .shortcut-name {
-    font-size: 0.75rem;
+    font-size: 0.8125rem;
     color: var(--text-secondary);
-    max-width: 80px;
+    max-width: 88px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     text-align: center;
+    font-weight: 500;
+    transition: all var(--transition-fast) var(--ease-out);
+}
+
+.shortcut-item:hover .shortcut-name {
+    color: var(--text-primary);
+    transform: translateY(2px);
+}
+
+/* 快捷方式拖拽状态 */
+.shortcut-item.dragging {
+    opacity: 0.5;
+    transform: scale(1.05);
+    cursor: grabbing;
+}
+
+.shortcut-item.drag-over {
+    transform: scale(1.1);
+}
+
+.shortcut-item.drag-over .shortcut-icon {
+    box-shadow: 0 0 0 3px var(--primary-color), 0 8px 24px rgba(99, 102, 241, 0.4);
+}
+
+/* 快捷方式右键菜单 */
+.shortcut-context-menu {
+    position: absolute;
+    background: var(--glass-bg);
+    border: 1.5px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    padding: var(--spacing-xs);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 16px 48px var(--shadow-color-strong);
+    z-index: 150;
+    min-width: 140px;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.95);
+    transition: all var(--transition-fast) var(--ease-spring);
+}
+
+.shortcut-context-menu.active {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+.shortcut-context-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-xs);
+    cursor: pointer;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+    transition: all var(--transition-fast) var(--ease-out);
+}
+
+.shortcut-context-item:hover {
+    background: var(--bg-secondary);
+    color: var(--primary-color);
+}
+
+.shortcut-context-item svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.shortcut-context-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: var(--spacing-xs) 0;
 }
 
 /* 添加快捷方式按钮 */
 .add-shortcut {
-    border: 2px dashed var(--border-color);
+    border: 2px dashed var(--border-color-strong);
     background: transparent;
-    display: none;
+}
+
+.add-shortcut::before {
+    background: var(--primary-light);
 }
 
 .add-shortcut:hover {
     border-color: var(--primary-color);
-    background: var(--primary-light);
+    border-style: solid;
 }
 
 .add-shortcut .shortcut-icon {
     background: transparent;
-    color: var(--text-secondary);
-    font-size: 1.5rem;
+    color: var(--text-tertiary);
+    font-size: 1.75rem;
+    box-shadow: none;
+    border: 2px dashed var(--border-color-strong);
+    transition: all var(--transition-fast) var(--ease-out);
 }
 
 .add-shortcut:hover .shortcut-icon {
     color: var(--primary-color);
+    border-color: var(--primary-color);
+    border-style: solid;
+    background: var(--primary-light);
+    transform: scale(1.05) rotate(90deg);
+}
+
+/* 空状态 */
+.shortcuts-empty {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    color: var(--text-tertiary);
+}
+
+.shortcuts-empty svg {
+    width: 64px;
+    height: 64px;
+    fill: var(--border-color-strong);
+    margin-bottom: var(--spacing-md);
+}
+
+.shortcuts-empty p {
+    font-size: 0.9375rem;
+}
+
+/* 快捷方式加载动画 */
+@keyframes shortcutAppear {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.shortcut-item {
+    animation: shortcutAppear 0.4s var(--ease-spring) forwards;
+}
+
+.shortcut-item:nth-child(1) { animation-delay: 0.05s; }
+.shortcut-item:nth-child(2) { animation-delay: 0.1s; }
+.shortcut-item:nth-child(3) { animation-delay: 0.15s; }
+.shortcut-item:nth-child(4) { animation-delay: 0.2s; }
+.shortcut-item:nth-child(5) { animation-delay: 0.25s; }
+.shortcut-item:nth-child(6) { animation-delay: 0.3s; }
+.shortcut-item:nth-child(7) { animation-delay: 0.35s; }
+.shortcut-item:nth-child(8) { animation-delay: 0.4s; }
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .shortcuts-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--spacing-sm);
+        padding: var(--spacing-xs);
+    }
+
+    .shortcut-item {
+        padding: var(--spacing-sm) var(--spacing-xs);
+        max-width: 80px;
+    }
+
+    .shortcut-icon {
+        width: 48px;
+        height: 48px;
+        font-size: 1.25rem;
+    }
+
+    .shortcut-name {
+        font-size: 0.75rem;
+        max-width: 72px;
+    }
+
+    .shortcut-item:hover {
+        transform: translateY(-4px);
+    }
+
+    .shortcut-item:hover .shortcut-icon {
+        transform: scale(1.05);
+    }
+}
+
+@media (max-width: 380px) {
+    .shortcuts-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--spacing-xs);
+    }
+
+    .shortcut-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 1.125rem;
+    }
 }

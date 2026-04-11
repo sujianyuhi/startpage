@@ -41,28 +41,14 @@ export function renderShortcuts() {
         </a>
     `).join('');
     
-    // 添加"添加快捷方式"按钮
-    html += `
-        <div class="shortcut-item add-shortcut" id="addShortcutBtn">
-            <div class="shortcut-icon">+</div>
-            ${showNames ? `<span class="shortcut-name">添加</span>` : ''}
-        </div>
-    `;
-    
     grid.innerHTML = html;
-    
+
     // 更新网格列数
     const perRow = state.settings.shortcutsPerRow;
     grid.style.gridTemplateColumns = `repeat(${perRow}, 1fr)`;
-    
-    // 绑定添加快捷方式按钮事件
-    const addBtn = document.getElementById('addShortcutBtn');
-    if (addBtn) {
-        addBtn.addEventListener('click', openShortcutModal);
-    }
-    
+
     // 右键菜单
-    grid.querySelectorAll('.shortcut-item:not(.add-shortcut)').forEach(item => {
+    grid.querySelectorAll('.shortcut-item').forEach(item => {
         item.addEventListener('contextmenu', (e) => {
             e.preventDefault();
             const id = item.dataset.id;

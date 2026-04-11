@@ -33,11 +33,11 @@ export const CONFIG = {
     
     // 天气图标 SVG
     weatherIcons: {
-        '晴': '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5" fill="currentColor"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" fill="none" stroke-width="2"/></svg>',
-        '多云': '<svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" fill="currentColor"/></svg>',
-        '阴': '<svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" fill="currentColor" opacity="0.7"/></svg>',
-        '雨': '<svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" fill="currentColor"/><path d="M8 21v-2M12 21v-2M16 21v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
-        '雪': '<svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z" fill="currentColor"/><circle cx="8" cy="22" r="1" fill="currentColor"/><circle cx="12" cy="22" r="1" fill="currentColor"/><circle cx="16" cy="22" r="1" fill="currentColor"/></svg>'
+        '晴': '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1.5" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22.5"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1.5" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22.5" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></g></svg>',
+        '多云': '<svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3" fill="currentColor" opacity="0.5"/><g stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round"><line x1="8" y1="2.5" x2="8" y2="4"/><line x1="3.5" y1="8" x2="5" y2="8"/><line x1="8" y1="12" x2="8" y2="13"/><line x1="4.2" y1="4.2" x2="5.3" y2="5.3"/><line x1="4.2" y1="11.8" x2="5.3" y2="10.7"/><line x1="11.8" y1="4.2" x2="10.7" y2="5.3"/></g><path d="M19 12h-1.26A6 6 0 1 0 11 18h8a4 4 0 0 0 0-8z" fill="currentColor"/></svg>',
+        '阴': '<svg viewBox="0 0 24 24"><path d="M19 12h-1.26A6 6 0 1 0 11 18h8a4 4 0 0 0 0-8z" fill="currentColor" opacity="0.85"/><path d="M7 15h-1a3 3 0 0 1 0-6h.26A5 5 0 0 1 15 7.5 4.5 4.5 0 0 1 19 12" fill="currentColor" opacity="0.5"/></svg>',
+        '雨': '<svg viewBox="0 0 24 24"><path d="M19 10h-1.26A6 6 0 1 0 11 16h8a4 4 0 0 0 0-8z" fill="currentColor"/><g stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round"><line x1="8" y1="19" x2="7" y2="22"/><line x1="12" y1="19" x2="11" y2="22"/><line x1="16" y1="19" x2="15" y2="22"/></g></svg>',
+        '雪': '<svg viewBox="0 0 24 24"><path d="M19 10h-1.26A6 6 0 1 0 11 16h8a4 4 0 0 0 0-8z" fill="currentColor"/><g fill="currentColor" opacity="0.8"><circle cx="8" cy="20" r="1.2"/><circle cx="12" cy="21.5" r="1"/><circle cx="16" cy="20" r="1.2"/><circle cx="10" cy="22.5" r="0.8"/><circle cx="14" cy="22.5" r="0.8"/></g></svg>'
     }
 };
 
@@ -55,12 +55,13 @@ export const defaultSettings = {
     searchPosition: 'top',
     shortcutsPerRow: 8,
     showShortcutNames: true,
-    wallpaperSource: 'color',
+    wallpaperSource: 'gradient',
     unsplashKeyword: 'nature',
     wallpaperBlur: 0,
     wallpaperOverlay: 0,
     wallpaperAutoChange: 'never',
     backgroundColor: '#ffffff',
+    backgroundGradient: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
     currentEngineId: 'bing'
 };
 

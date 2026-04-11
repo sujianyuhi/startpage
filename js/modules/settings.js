@@ -80,18 +80,6 @@ export function closeSettings() {
  * 初始化设置控件
  */
 function initSettingControls() {
-    // 显示秒数
-    bindCheckbox('showSeconds', (checked) => {
-        state.settings.showSeconds = checked;
-        storage.set('settings', state.settings);
-    });
-    
-    // 显示农历
-    bindCheckbox('showLunar', (checked) => {
-        state.settings.showLunar = checked;
-        storage.set('settings', state.settings);
-    });
-    
     // 显示天气
     bindCheckbox('showWeather', (checked) => {
         state.settings.showWeather = checked;
@@ -191,6 +179,17 @@ function initSettingControls() {
             }
         });
     }
+    
+    // 渐变选择
+    document.querySelectorAll('.gradient-option').forEach(option => {
+        option.addEventListener('click', () => {
+            document.querySelectorAll('.gradient-option').forEach(o => o.classList.remove('active'));
+            option.classList.add('active');
+            state.settings.backgroundGradient = option.dataset.gradient;
+            storage.set('settings', state.settings);
+            updateWallpaper();
+        });
+    });
     
     // 颜色选择
     document.querySelectorAll('.color-option').forEach(option => {
@@ -345,6 +344,7 @@ function updateWallpaperSourceUI() {
     const source = state.settings.wallpaperSource;
     const unsplashContainer = document.getElementById('unsplashKeywordContainer');
     const localContainer = document.getElementById('localWallpaperContainer');
+    const gradientContainer = document.getElementById('gradientWallpaperContainer');
     const colorContainer = document.getElementById('colorWallpaperContainer');
     
     if (unsplashContainer) {
@@ -352,6 +352,9 @@ function updateWallpaperSourceUI() {
     }
     if (localContainer) {
         localContainer.style.display = source === 'local' ? 'block' : 'none';
+    }
+    if (gradientContainer) {
+        gradientContainer.style.display = source === 'gradient' ? 'block' : 'none';
     }
     if (colorContainer) {
         colorContainer.style.display = source === 'color' ? 'block' : 'none';

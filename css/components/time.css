@@ -1,63 +1,110 @@
 /**
  * 时锦起始页 - 时间日期组件样式
+ * 优化版本：提升视觉层次和动态效果 v2.0
  */
 
 /* 时间模块 */
 .time-module {
     text-align: center;
     margin-bottom: var(--spacing-xl);
+    position: relative;
 }
 
 .time-display {
-    font-size: clamp(3.5rem, 10vw, 6rem);
-    font-weight: 700;
-    letter-spacing: 0.05em;
+    font-size: clamp(3.5rem, 10vw, 7rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
     color: var(--text-primary);
-    line-height: 1.2;
+    line-height: 1;
     user-select: none;
-    transition: all 0.3s var(--ease-out);
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all var(--transition-slow) var(--ease-out);
+    text-shadow: 
+        0 2px 24px rgba(0, 0, 0, 0.06),
+        0 1px 4px rgba(0, 0, 0, 0.03);
+    font-variant-numeric: tabular-nums;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.02em;
 }
 
 .time-display:hover {
-    transform: scale(1.02);
-    text-shadow: 0 4px 20px rgba(66, 184, 131, 0.3);
+    transform: scale(1.015);
+    text-shadow: 
+        0 4px 32px var(--primary-glow),
+        0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .time-display .colon {
     display: inline-block;
-    margin: 0 0.08em;
+    margin: 0 0.04em;
     animation: colonPulse 2s ease-in-out infinite;
+    color: var(--primary-color);
+    font-weight: 300;
 }
 
 .time-display .time-unit {
     display: inline-block;
-    transition: all 0.3s var(--ease-out);
+    transition: all var(--transition-slow) var(--ease-out);
+    position: relative;
+}
+
+.time-display .time-unit.changed {
+    animation: timeChange 0.5s var(--ease-out);
+}
+
+@keyframes timeChange {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    50% {
+        transform: translateY(-8px);
+        opacity: 0.5;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .date-display {
     font-size: 1.125rem;
     font-weight: 500;
     color: var(--text-secondary);
-    margin-top: var(--spacing-xs);
-    letter-spacing: 0.1em;
+    margin-top: var(--spacing-sm);
+    letter-spacing: 0.08em;
     user-select: none;
     transition: all 0.3s var(--ease-out);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.date-display::before,
+.date-display::after {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-color-strong), transparent);
 }
 
 .greeting-display {
-    font-size: clamp(1.25rem, 3vw, 1.5rem);
-    font-weight: 600;
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    font-size: clamp(1.375rem, 3vw, 1.75rem);
+    font-weight: 700;
+    background: var(--primary-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-top: var(--spacing-sm);
-    padding: var(--spacing-xs) var(--spacing-md);
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-sm) var(--spacing-xl);
     border-radius: var(--border-radius);
     user-select: none;
-    animation: greetingFadeIn 0.8s var(--ease-out);
+    animation: greetingFadeIn 1s var(--ease-out);
     position: relative;
+    display: inline-block;
+    letter-spacing: 0.04em;
 }
 
 .greeting-display::before,
@@ -65,45 +112,94 @@
     content: '';
     position: absolute;
     top: 50%;
-    width: 30px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+    width: 40px;
+    height: 2px;
+    background: var(--primary-gradient);
     transform: translateY(-50%);
+    opacity: 0.5;
+    border-radius: 1px;
 }
 
 .greeting-display::before {
     right: 100%;
-    margin-right: var(--spacing-sm);
+    margin-right: var(--spacing-md);
 }
 
 .greeting-display::after {
     left: 100%;
-    margin-left: var(--spacing-sm);
+    margin-left: var(--spacing-md);
+}
+
+/* 农历日期样式 */
+.lunar-date {
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+    margin-top: var(--spacing-xs);
+    font-weight: 400;
+}
+
+/* 时间段样式 */
+.time-period {
+    font-size: 0.5em;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    margin-left: var(--spacing-xs);
+    vertical-align: super;
 }
 
 /* 移动端适配 */
 @media (max-width: 768px) {
     .time-display {
-        letter-spacing: 0.02em;
+        font-size: clamp(2.75rem, 12vw, 4.5rem);
+        letter-spacing: 0.01em;
     }
 
     .greeting-display::before,
     .greeting-display::after {
-        width: 20px;
+        width: 24px;
     }
 
     .greeting-display {
+        letter-spacing: 0.03em;
+        font-size: 1.125rem;
+    }
+
+    .date-display {
+        font-size: 1rem;
         letter-spacing: 0.05em;
+    }
+
+    .date-display::before,
+    .date-display::after {
+        width: 16px;
     }
 }
 
 @media (max-width: 480px) {
     .time-display {
-        font-size: clamp(2.5rem, 12vw, 4rem);
+        font-size: clamp(2.25rem, 14vw, 3.5rem);
     }
 
     .greeting-display::before,
     .greeting-display::after {
         display: none;
     }
+
+    .greeting-display {
+        padding: var(--spacing-xs) var(--spacing-md);
+    }
+
+    .date-display::before,
+    .date-display::after {
+        display: none;
+    }
+}
+
+/* 深色模式优化 */
+[data-theme="dark"] .time-display {
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .time-display:hover {
+    text-shadow: 0 4px 30px var(--primary-glow);
 }

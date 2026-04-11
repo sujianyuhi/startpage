@@ -21,16 +21,22 @@
     </div>
 
     <!-- ==================== 天气模块 ==================== -->
-    <aside class="weather-module hide-in-immersive" id="weatherModule" role="complementary" aria-label="天气信息">
+    <aside class="weather-module weather-sunny hide-in-immersive" id="weatherModule" role="complementary" aria-label="天气信息">
+        <div class="weather-bg-gradient" aria-hidden="true"></div>
         <div class="weather-main">
-            <div class="weather-icon" id="weatherIcon">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <circle cx="12" cy="12" r="5"/>
-                    <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
-                </svg>
+            <div class="weather-icon-wrap">
+                <div class="weather-icon-glow" aria-hidden="true"></div>
+                <div class="weather-icon" id="weatherIcon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="12" r="5"/>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                </div>
             </div>
             <div class="weather-info">
-                <span class="weather-temp" id="weatherTemp">--°</span>
+                <div class="weather-temp-row">
+                    <span class="weather-temp" id="weatherTemp">--°</span>
+                </div>
                 <span class="weather-desc" id="weatherDesc">--</span>
                 <span class="weather-city" id="weatherCity">定位中...</span>
             </div>
@@ -41,7 +47,7 @@
                 <span id="weatherHumidity">--%</span>
             </div>
             <div class="weather-detail-item">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" fill="currentColor"/></svg>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                 <span id="weatherWind">--</span>
             </div>
         </div>
@@ -178,26 +184,7 @@
                         <span class="toggle-slider"></span>
                     </label>
                 </div>
-                <div class="setting-item">
-                    <label class="toggle-switch">
-                        <span>
-                            <span class="setting-label">显示秒数</span>
-                            <span class="setting-desc">时间显示包含秒数</span>
-                        </span>
-                        <input type="checkbox" id="showSeconds">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                <div class="setting-item">
-                    <label class="toggle-switch">
-                        <span>
-                            <span class="setting-label">显示农历</span>
-                            <span class="setting-desc">日期显示包含农历</span>
-                        </span>
-                        <input type="checkbox" id="showLunar">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
+
                 <div class="setting-item">
                     <label class="toggle-switch">
                         <span>
@@ -293,6 +280,7 @@
                     <label class="setting-label">壁纸源</label>
                     <span class="setting-desc">选择壁纸获取方式</span>
                     <select class="setting-select" id="wallpaperSource">
+                        <option value="gradient">渐变背景</option>
                         <option value="bing">必应每日壁纸</option>
                         <option value="unsplash">Unsplash随机</option>
                         <option value="local">本地图片</option>
@@ -308,6 +296,20 @@
                     <label class="setting-label">上传本地图片</label>
                     <span class="setting-desc">选择本地图片作为壁纸</span>
                     <input type="file" class="setting-input" id="localWallpaperInput" accept="image/*">
+                </div>
+                <div class="setting-item" id="gradientWallpaperContainer" style="display: none;">
+                    <label class="setting-label">渐变预设</label>
+                    <span class="setting-desc">点击选择渐变背景</span>
+                    <div class="gradient-picker" id="gradientPicker">
+                        <div class="gradient-option active" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);" data-gradient="linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)"></div>
+                        <div class="gradient-option" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);" data-gradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"></div>
+                        <div class="gradient-option" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);" data-gradient="linear-gradient(135deg, #f093fb 0%, #f5576c 100%)"></div>
+                        <div class="gradient-option" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);" data-gradient="linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"></div>
+                        <div class="gradient-option" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);" data-gradient="linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)"></div>
+                        <div class="gradient-option" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);" data-gradient="linear-gradient(135deg, #fa709a 0%, #fee140 100%)"></div>
+                        <div class="gradient-option" style="background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);" data-gradient="linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)"></div>
+                        <div class="gradient-option" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);" data-gradient="linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)"></div>
+                    </div>
                 </div>
                 <div class="setting-item" id="colorWallpaperContainer" style="display: none;">
                     <label class="setting-label">背景颜色</label>

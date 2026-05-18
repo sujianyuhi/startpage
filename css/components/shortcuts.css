@@ -8,6 +8,158 @@
     width: 100%;
     max-width: 960px;
     transition: all var(--transition-normal) var(--ease-out);
+    position: relative;
+}
+
+/* 快捷方式头部 */
+.shortcuts-header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 var(--spacing-md) var(--spacing-sm);
+    opacity: 0;
+    transition: opacity var(--transition-fast) var(--ease-out);
+}
+
+.shortcuts-container:hover .shortcuts-header {
+    opacity: 1;
+}
+
+/* 排序触发按钮 */
+.sort-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--border-radius-sm);
+    border: none;
+    background: transparent;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    transition: all var(--transition-fast) var(--ease-out);
+    padding: 0;
+}
+
+.sort-trigger:hover {
+    background: var(--bg-secondary);
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.sort-trigger svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
+
+/* 排序模式下的头部 */
+.shortcuts-container.sorting .shortcuts-header {
+    opacity: 1;
+}
+
+.shortcuts-container.sorting .sort-trigger {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* 排序操作按钮区域 */
+.sort-actions {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg) 0;
+    animation: sortActionsAppear 0.3s var(--ease-spring);
+}
+
+.sort-actions.hidden {
+    display: none;
+}
+
+@keyframes sortActionsAppear {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.sort-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--border-radius-sm);
+    border: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast) var(--ease-out);
+}
+
+.sort-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.sort-confirm {
+    background: var(--primary-color);
+    color: white;
+    box-shadow: 0 2px 8px rgba(66, 184, 131, 0.35);
+}
+
+.sort-confirm:hover {
+    background: var(--primary-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(66, 184, 131, 0.45);
+}
+
+.sort-cancel {
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+}
+
+.sort-cancel:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+}
+
+/* 排序提示 */
+.sort-hint {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+    color: var(--text-tertiary);
+    font-size: 0.8125rem;
+    animation: sortHintAppear 0.4s var(--ease-spring);
+}
+
+.sort-hint.hidden {
+    display: none;
+}
+
+.sort-hint svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+    opacity: 0.7;
+}
+
+@keyframes sortHintAppear {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .shortcuts-grid {
@@ -139,17 +291,65 @@
 
 /* 快捷方式拖拽状态 */
 .shortcut-item.dragging {
-    opacity: 0.5;
-    transform: scale(1.05);
+    opacity: 0.4;
+    transform: scale(1.08);
     cursor: grabbing;
+    z-index: 100;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .shortcut-item.drag-over {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .shortcut-item.drag-over .shortcut-icon {
     box-shadow: 0 0 0 3px var(--primary-color), 0 8px 24px rgba(99, 102, 241, 0.4);
+}
+
+/* 排序模式下的快捷方式 */
+.shortcuts-container.sorting .shortcut-item {
+    cursor: grab;
+    animation: none;
+}
+
+.shortcuts-container.sorting .shortcut-item:hover {
+    transform: translateY(-4px);
+}
+
+.shortcuts-container.sorting .shortcut-item:hover .shortcut-icon {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 2px var(--primary-color), 0 6px 16px rgba(124, 58, 237, 0.35);
+}
+
+.shortcuts-container.sorting .shortcut-item .shortcut-name::after {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-left: 4px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M9 3L5 6.99h3V14h2V6.99h3L9 3zm7 14.01V10h-2v7.01h-3L15 21l4-3.99h-3z'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.5;
+    vertical-align: middle;
+}
+
+/* 拖拽占位符 */
+.shortcut-placeholder {
+    background: var(--bg-secondary);
+    border: 2px dashed var(--border-color-strong);
+    border-radius: var(--card-radius);
+    opacity: 0.6;
+    animation: placeholderPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes placeholderPulse {
+    0%, 100% {
+        opacity: 0.4;
+    }
+    50% {
+        opacity: 0.7;
+    }
 }
 
 /* 快捷方式右键菜单 */
@@ -311,6 +511,50 @@
     .shortcut-item:hover .shortcut-icon {
         transform: scale(1.05);
     }
+
+    /* 移动端排序模式适配 */
+    .shortcuts-container.sorting .shortcut-item {
+        cursor: grab;
+    }
+
+    .shortcuts-container.sorting .shortcut-item:hover {
+        transform: translateY(-2px);
+    }
+
+    .sort-actions {
+        gap: var(--spacing-sm);
+        padding: var(--spacing-md) 0;
+    }
+
+    .sort-btn {
+        padding: var(--spacing-sm) var(--spacing-md);
+        font-size: 0.8125rem;
+    }
+
+    .sort-btn svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .sort-hint {
+        font-size: 0.75rem;
+        padding: var(--spacing-sm);
+    }
+
+    .shortcuts-header {
+        opacity: 1;
+        padding: 0 var(--spacing-xs) var(--spacing-xs);
+    }
+
+    .sort-trigger {
+        width: 28px;
+        height: 28px;
+    }
+
+    .sort-trigger svg {
+        width: 16px;
+        height: 16px;
+    }
 }
 
 @media (max-width: 380px) {
@@ -323,5 +567,17 @@
         width: 44px;
         height: 44px;
         font-size: 1.125rem;
+    }
+
+    .sort-actions {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-xs);
+    }
+
+    .sort-btn {
+        width: 100%;
+        max-width: 200px;
+        justify-content: center;
     }
 }

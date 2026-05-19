@@ -134,19 +134,28 @@ export function renderShortcuts(draggable = false) {
     const showNames = state.settings.showShortcutNames;
     const isDragMode = draggable || isSorting;
 
-    let html = state.shortcuts.map((s, index) => `
-        <div class="shortcut-item ${isDragMode ? 'sortable' : ''}" 
-             href="${isDragMode ? '#' : s.url}" 
-             target="${isDragMode ? '' : '_blank'}"
-             data-id="${s.id}" 
-             data-index="${index}"
-             ${isDragMode ? 'draggable="true"' : ''}>
-            <div class="shortcut-icon" style="background: ${getHashColor(s.name)}">
-                ${s.icon ? `<img src="${s.icon}" alt="" onerror="this.style.display='none'; this.parentNode.textContent='${s.name[0]}'">` : s.name[0]}
-            </div>
-            ${showNames ? `<span class="shortcut-name">${escapeHtml(s.name)}</span>` : ''}
-        </div>
-    `).join('');
+    let html = state.shortcuts.map((s, index) => {
+        const iconHtml = s.icon ? `<img src="${s.icon}" alt="" onerror="this.style.display='none'; this.parentNode.textContent='${s.name[0]}'">` : s.name[0];
+        const nameHtml = showNames ? `<span class="shortcut-name">${escapeHtml(s.name)}</span>` : '';
+        if (isDragMode) {
+            return `<div class="shortcut-item sortable"
+                        data-id="${s.id}"
+                        data-index="${index}"
+                        draggable="true">
+                        <div class="shortcut-icon" style="background: ${getHashColor(s.name)}">${iconHtml}</div>
+                        ${nameHtml}
+                    </div>`;
+        }
+        return `<a class="shortcut-item"
+                   href="${s.url}"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   data-id="${s.id}"
+                   data-index="${index}">
+                   <div class="shortcut-icon" style="background: ${getHashColor(s.name)}">${iconHtml}</div>
+                   ${nameHtml}
+               </a>`;
+    }).join('');
 
     grid.innerHTML = html;
 

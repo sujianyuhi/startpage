@@ -1,0 +1,15 @@
+services:
+  startpage:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: startpage
+    ports:
+      - "7776:80"
+    restart: unless-stopped
+    networks:
+      - startpage-network
+
+networks:
+  startpage-network:
+    driver: bridge

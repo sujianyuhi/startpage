@@ -176,3 +176,56 @@
 .main-container.search-position-top .shortcut-item {
     padding: var(--spacing-md) var(--spacing-xs);
 }
+
+/* ==================== 备案号 ==================== */
+.beian-footer {
+    position: fixed;
+    bottom: var(--spacing-md);
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-tertiary);
+    opacity: 0.7;
+    z-index: 10;
+    pointer-events: none;
+    transition: opacity var(--transition-fast) var(--ease-out);
+}
+
+.beian-footer a {
+    color: inherit;
+    text-decoration: none;
+    pointer-events: auto;
+    transition: color var(--transition-fast) var(--ease-out);
+}
+
+.beian-footer a:hover {
+    color: var(--text-secondary);
+    text-decoration: underline;
+}
+
+.beian-divider {
+    margin: 0 var(--spacing-xs);
+    opacity: 0.5;
+}
+
+.beian-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+    vertical-align: text-bottom;
+    display: inline-block;
+}
+
+/* 沉浸模式下隐藏备案号 */
+.main-container.immersive ~ .beian-footer {
+    opacity: 0;
+}
+
+/* 移动端备案号 */
+@media (max-width: 768px) {
+    .beian-footer {
+        font-size: 0.6875rem;
+        bottom: var(--spacing-sm);
+    }
+}

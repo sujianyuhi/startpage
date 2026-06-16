@@ -12,9 +12,9 @@ const FAVICON_TIMEOUT = 5000;
 
 const FAVICON_SOURCE_MAP = {
     faviconim: (domain) => `https://favicon.im/${domain}`,
-    iconhorse: (domain) => `https://icon.horse/icon/${domain}`,
-    faviconkit: (domain) => `https://api.faviconkit.com/${domain}/64`,
-    google: (domain) => `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
+    iconhorse: (domain) => `https://icon.horse/icon/${domain}?size=128`,
+    faviconkit: (domain) => `https://api.faviconkit.com/${domain}/144`,
+    google: (domain) => `https://www.google.com/s2/favicons?domain=${domain}&sz=256`,
     duckduckgo: (domain) => `https://icons.duckduckgo.com/ip3/${domain}.ico`
 };
 
@@ -187,13 +187,14 @@ export function renderShortcuts(draggable = false) {
         const iconHtml = s.icon
             ? `<img src="${s.icon}" alt="" data-fallback="${escapeHtml(s.name[0])}" data-icon-src="${s.icon}">`
             : escapeHtml(s.name[0]);
+        const iconBg = s.icon ? 'transparent' : getHashColor(s.name);
         const nameHtml = showNames ? `<span class="shortcut-name">${escapeHtml(s.name)}</span>` : '';
         if (isDragMode) {
             return `<div class="shortcut-item sortable"
                         data-id="${s.id}"
                         data-index="${index}"
                         draggable="true">
-                        <div class="shortcut-icon" style="background: ${getHashColor(s.name)}">${iconHtml}</div>
+                        <div class="shortcut-icon" style="background: ${iconBg}">${iconHtml}</div>
                         ${nameHtml}
                     </div>`;
         }
@@ -203,7 +204,7 @@ export function renderShortcuts(draggable = false) {
                    rel="noopener noreferrer"
                    data-id="${s.id}"
                    data-index="${index}">
-                   <div class="shortcut-icon" style="background: ${getHashColor(s.name)}">${iconHtml}</div>
+                   <div class="shortcut-icon" style="background: ${iconBg}">${iconHtml}</div>
                    ${nameHtml}
                </a>`;
     }).join('');

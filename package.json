@@ -1,0 +1,13 @@
+{
+  "name": "startpage",
+  "version": "1.0.0",
+  "description": "Startpage - 个性化浏览器起始页",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "serve": "node server.js"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

@@ -18,6 +18,7 @@ import * as settings from './modules/settings.js';
 import * as keyboard from './modules/keyboard.js';
 import * as contextMenu from './modules/contextMenu.js';
 import * as immersive from './modules/immersive.js';
+import * as notification from './modules/notification.js';
 
 /**
  * 初始化应用
@@ -41,6 +42,7 @@ function init() {
     keyboard.init();
     contextMenu.init();
     immersive.init();
+    notification.init();
     
     // 聚焦搜索框
     setTimeout(() => {

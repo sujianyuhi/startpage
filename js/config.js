@@ -62,7 +62,8 @@ export const defaultSettings = {
     wallpaperAutoChange: 'never',
     backgroundColor: '#ffffff',
     backgroundGradient: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
-    currentEngineId: 'bing'
+    currentEngineId: 'bing',
+    faviconSource: 'faviconim'
 };
 
 // ==================== 状态管理 ====================

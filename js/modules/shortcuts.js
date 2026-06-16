@@ -7,6 +7,30 @@ import { state, CONFIG } from '../config.js';
 import * as storage from '../utils/storage.js';
 import { escapeHtml, getHashColor, showToast, showConfirm } from '../utils/dom.js';
 
+// ==================== Favicon 获取配置 ====================
+const FAVICON_TIMEOUT = 5000;
+
+const FAVICON_SOURCE_MAP = {
+    faviconim: (domain) => `https://favicon.im/${domain}`,
+    iconhorse: (domain) => `https://icon.horse/icon/${domain}`,
+    faviconkit: (domain) => `https://api.faviconkit.com/${domain}/64`,
+    google: (domain) => `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
+    duckduckgo: (domain) => `https://icons.duckduckgo.com/ip3/${domain}.ico`
+};
+
+function getFaviconSources() {
+    const sourceKey = state.settings?.faviconSource || 'faviconim';
+    const primary = FAVICON_SOURCE_MAP[sourceKey];
+    const sources = primary ? [primary] : [];
+    // 始终将其他源作为备选
+    Object.entries(FAVICON_SOURCE_MAP).forEach(([key, factory]) => {
+        if (key !== sourceKey) {
+            sources.push(factory);
+        }
+    });
+    return sources;
+}
+
 // ==================== 排序状态管理 ====================
 let isSorting = false;
 let dragSrcEl = null;
@@ -29,6 +53,31 @@ export function init() {
             addShortcut(name, url);
         });
     });
+
+    // 页面加载完成后，后台静默获取缺失的图标
+    if (typeof requestIdleCallback !== 'undefined') {
+        requestIdleCallback(() => autoFetchMissingIcons(), { timeout: 3000 });
+    } else {
+        setTimeout(() => autoFetchMissingIcons(), 2000);
+    }
+}
+
+/**
+ * 自动获取缺少图标的快捷方式图标
+ */
+async function autoFetchMissingIcons() {
+    const missingIcons = state.shortcuts.filter(s => !s.icon);
+    if (missingIcons.length === 0) return;
+
+    for (const shortcut of missingIcons) {
+        const icon = await fetchFavicon(shortcut.url);
+        if (icon) {
+            shortcut.icon = icon;
+        }
+    }
+
+    storage.set('shortcuts', state.shortcuts);
+    renderShortcuts();
 }
 
 /**
@@ -135,7 +184,9 @@ export function renderShortcuts(draggable = false) {
     const isDragMode = draggable || isSorting;
 
     let html = state.shortcuts.map((s, index) => {
-        const iconHtml = s.icon ? `<img src="${s.icon}" alt="" onerror="this.style.display='none'; this.parentNode.textContent='${s.name[0]}'">` : s.name[0];
+        const iconHtml = s.icon
+            ? `<img src="${s.icon}" alt="" data-fallback="${escapeHtml(s.name[0])}" data-icon-src="${s.icon}">`
+            : escapeHtml(s.name[0]);
         const nameHtml = showNames ? `<span class="shortcut-name">${escapeHtml(s.name)}</span>` : '';
         if (isDragMode) {
             return `<div class="shortcut-item sortable"
@@ -158,6 +209,16 @@ export function renderShortcuts(draggable = false) {
     }).join('');
 
     grid.innerHTML = html;
+
+    // 绑定图标加载失败事件，优雅回退到首字母
+    grid.querySelectorAll('.shortcut-icon img').forEach(img => {
+        img.addEventListener('error', function handleIconError() {
+            this.style.display = 'none';
+            const fallback = document.createTextNode(this.dataset.fallback || '');
+            this.parentNode.appendChild(fallback);
+            this.removeEventListener('error', handleIconError);
+        });
+    });
 
     // 更新网格列数
     const perRow = state.settings.shortcutsPerRow;
@@ -410,12 +471,24 @@ function reorderShortcuts(fromIndex, toIndex) {
  * @param {string} name - 网站名称
  * @param {string} url - 网站地址
  */
-export function addShortcut(name, url) {
+export async function addShortcut(name, url) {
     const id = Date.now().toString();
     state.shortcuts.push({ id, name, url, icon: '' });
     storage.set('shortcuts', state.shortcuts);
     renderShortcuts();
-    showToast('快捷方式已添加');
+    showToast('快捷方式已添加，正在获取图标...');
+
+    // 自动获取 Favicon
+    const icon = await fetchFavicon(url);
+    if (icon) {
+        const shortcut = state.shortcuts.find(s => s.id === id);
+        if (shortcut) {
+            shortcut.icon = icon;
+            storage.set('shortcuts', state.shortcuts);
+            renderShortcuts();
+            showToast('图标获取成功');
+        }
+    }
 }
 
 /**
@@ -470,7 +543,7 @@ function showShortcutContextMenu(e, id) {
 /**
  * 确认添加快捷方式
  */
-export function confirmAddShortcut() {
+export async function confirmAddShortcut() {
     const nameInput = document.getElementById('shortcutNameInput');
     const urlInput = document.getElementById('shortcutUrlInput');
 
@@ -488,6 +561,128 @@ export function confirmAddShortcut() {
         url = 'https://' + url;
     }
 
-    addShortcut(name, url);
+    const id = Date.now().toString();
+    state.shortcuts.push({ id, name, url, icon: '' });
+    storage.set('shortcuts', state.shortcuts);
+    renderShortcuts();
     closeShortcutModal();
+    showToast('快捷方式已添加，正在获取图标...');
+
+    // 自动获取 Favicon
+    const icon = await fetchFavicon(url);
+    if (icon) {
+        const shortcut = state.shortcuts.find(s => s.id === id);
+        if (shortcut) {
+            shortcut.icon = icon;
+            storage.set('shortcuts', state.shortcuts);
+            renderShortcuts();
+            showToast('图标获取成功');
+        }
+    }
+}
+
+// ==================== Favicon 获取功能 ====================
+
+/**
+ * 检测图片是否可以加载
+ * @param {string} src - 图片地址
+ * @returns {Promise<boolean>}
+ */
+function checkImageLoad(src) {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = src;
+    });
+}
+
+/**
+ * 获取网站 Favicon
+ * @param {string} url - 网站地址
+ * @param {number} timeout - 超时时间（毫秒）
+ * @returns {Promise<string>} Favicon URL，获取失败返回空字符串
+ */
+export async function fetchFavicon(url, timeout = FAVICON_TIMEOUT) {
+    let domain;
+    try {
+        const urlObj = new URL(url);
+        domain = urlObj.hostname;
+    } catch {
+        return '';
+    }
+
+    for (const sourceFactory of getFaviconSources()) {
+        const sourceUrl = sourceFactory(domain);
+        try {
+            const canLoad = await Promise.race([
+                checkImageLoad(sourceUrl),
+                new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('timeout')), timeout)
+                )
+            ]);
+            if (canLoad) {
+                return sourceUrl;
+            }
+        } catch {
+            // 超时或异常，继续尝试下一个源
+            continue;
+        }
+    }
+    return '';
+}
+
+/**
+ * 为指定快捷方式刷新图标
+ * @param {string} id - 快捷方式ID
+ */
+export async function refreshShortcutIcon(id) {
+    const shortcut = state.shortcuts.find(s => s.id === id);
+    if (!shortcut) return;
+
+    showToast(`正在获取 ${shortcut.name} 的图标...`);
+    const icon = await fetchFavicon(shortcut.url);
+    if (icon) {
+        shortcut.icon = icon;
+        storage.set('shortcuts', state.shortcuts);
+        renderShortcuts();
+        showToast(`${shortcut.name} 图标已更新`);
+    } else {
+        showToast(`${shortcut.name} 图标获取失败，将使用默认显示`);
+    }
+}
+
+/**
+ * 一键刷新所有快捷方式图标
+ */
+export async function refreshAllIcons() {
+    if (state.shortcuts.length === 0) {
+        showToast('暂无快捷方式');
+        return;
+    }
+
+    showToast('开始获取所有图标，请稍候...');
+    let successCount = 0;
+    let failCount = 0;
+
+    for (const shortcut of state.shortcuts) {
+        const icon = await fetchFavicon(shortcut.url);
+        if (icon) {
+            shortcut.icon = icon;
+            successCount++;
+        } else {
+            failCount++;
+        }
+    }
+
+    storage.set('shortcuts', state.shortcuts);
+    renderShortcuts();
+
+    if (successCount > 0 && failCount === 0) {
+        showToast(`全部 ${successCount} 个图标获取成功`);
+    } else if (successCount > 0 && failCount > 0) {
+        showToast(`${successCount} 个图标获取成功，${failCount} 个失败`);
+    } else {
+        showToast('图标获取失败，请检查网络连接');
+    }
 }

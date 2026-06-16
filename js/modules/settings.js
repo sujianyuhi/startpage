@@ -6,7 +6,7 @@
 import { state, defaultSettings, CONFIG } from '../config.js';
 import * as storage from '../utils/storage.js';
 import { showToast, showConfirm } from '../utils/dom.js';
-import { renderShortcuts } from './shortcuts.js';
+import { renderShortcuts, confirmAddShortcut as shortcutsConfirmAdd, refreshAllIcons } from './shortcuts.js';
 import { renderTodos } from './todo.js';
 import * as weather from './weather.js';
 import * as todo from './todo.js';
@@ -144,7 +144,14 @@ function initSettingControls() {
         storage.set('settings', state.settings);
         renderShortcuts();
     });
-    
+
+    // Favicon 来源
+    bindSelect('faviconSource', (value) => {
+        state.settings.faviconSource = value;
+        storage.set('settings', state.settings);
+        showToast('Favicon 源已切换，刷新图标后生效');
+    });
+
     // 壁纸源
     bindSelect('wallpaperSource', (value) => {
         state.settings.wallpaperSource = value;
@@ -260,13 +267,19 @@ function initSettingControls() {
     // 快捷方式弹窗
     const cancelShortcutBtn = document.getElementById('cancelShortcutBtn');
     const confirmShortcutBtn = document.getElementById('confirmShortcutBtn');
-    
+
     if (cancelShortcutBtn) {
         cancelShortcutBtn.addEventListener('click', closeShortcutModal);
     }
-    
+
     if (confirmShortcutBtn) {
-        confirmShortcutBtn.addEventListener('click', confirmAddShortcut);
+        confirmShortcutBtn.addEventListener('click', shortcutsConfirmAdd);
+    }
+
+    // 一键获取全部图标
+    const refreshAllIconsBtn = document.getElementById('refreshAllIconsBtn');
+    if (refreshAllIconsBtn) {
+        refreshAllIconsBtn.addEventListener('click', refreshAllIcons);
     }
     
     // 确认弹窗
@@ -425,36 +438,6 @@ function importSettings(e) {
         }
     };
     reader.readAsText(file);
-}
-
-/**
- * 确认添加快捷方式
- */
-function confirmAddShortcut() {
-    const nameInput = document.getElementById('shortcutNameInput');
-    const urlInput = document.getElementById('shortcutUrlInput');
-    
-    if (!nameInput || !urlInput) return;
-    
-    let name = nameInput.value.trim();
-    let url = urlInput.value.trim();
-    
-    if (!name || !url) {
-        showToast('请填写完整信息');
-        return;
-    }
-    
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-        url = 'https://' + url;
-    }
-    
-    const id = Date.now().toString();
-    state.shortcuts.push({ id, name, url, icon: '' });
-    storage.set('shortcuts', state.shortcuts);
-    renderShortcuts();
-    
-    closeShortcutModal();
-    showToast('快捷方式已添加');
 }
 
 /**
